@@ -1,0 +1,12 @@
+# Snapshot of 'n3r0's Hideout'
+roles: []
+categories:
+- name: Text Channels
+  channels:
+  - name: general
+    type: text
+- name: Voice Channels
+  channels:
+  - name: General
+    type: voice
+channels: []

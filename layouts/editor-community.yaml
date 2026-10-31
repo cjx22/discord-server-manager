@@ -1,0 +1,265 @@
+# Merged layout from layouts/references/: the editor community's structure (last 4
+# screenshots) plus SC's Fridge extras (Verification, Roles, Art, Ideas forum,
+# Cmds, Duo). Channel names are written plainly here and rendered in
+# 𝐛𝐨𝐥𝐝 by bold_names.
+# Changes from the references: BR/US chats merged into one chat, "Reaper" renamed to
+# N3r0, mural-da-vergonha -> Wall-Of-Shame; Support and Staff are additions.
+bold_names: true
+bots_role: 🤖 Bots                  # every bot in the server gets this role
+
+# Reusable permission blocks (YAML anchors). Not read by the manager directly.
+templates:
+  manager_access: &manager_access    # this bot, so it can keep managing hidden channels
+    allow: [view_channel, send_messages, embed_links, attach_files, read_message_history,
+            manage_channels, manage_roles]
+  bot_access: &bot_access            # third-party bots
+    allow: [view_channel, send_messages, embed_links, attach_files, read_message_history,
+            add_reactions]
+  members_only: &members_only        # hidden until a member is verified
+    "@everyone": {deny: [view_channel]}
+    "✅ Verified": {allow: [view_channel]}
+    "Server Manager": *manager_access
+    "🤖 Bots": *bot_access
+  read_only: &read_only              # members can read, only staff post
+    "✅ Verified": {deny: [send_messages, send_messages_in_threads, create_public_threads,
+                          create_private_threads]}
+    "🔨 Moderator": {allow: [send_messages, send_messages_in_threads]}
+  public_read_only: &public_read_only  # readable before verifying
+    "@everyone": {allow: [view_channel, read_message_history],
+                  deny: [send_messages, send_messages_in_threads, create_public_threads,
+                         create_private_threads, add_reactions]}
+
+roles:                               # new roles land at the bottom; order shown is top-down intent
+  - name: 👑 Owner
+    color: "#f1c40f"
+    hoist: true
+    permissions: []                  # cosmetic: the server owner already has every permission
+  - name: 🔨 Moderator
+    color: "#e67e22"
+    hoist: true
+    permissions: [kick_members, ban_members, moderate_members, manage_messages, manage_threads,
+                  manage_nicknames, mute_members, deafen_members, move_members, view_audit_log]
+  - name: 🤖 Bots
+    color: "#95a5a6"
+    permissions: []
+  - name: 🤝 Partner
+    color: "#1abc9c"
+    hoist: true
+    permissions: []
+  - name: 💎 S-Rank
+    color: "#9b59b6"
+    hoist: true
+    permissions: []
+  - name: 🥇 A-Rank
+    color: "#e5b80b"
+    permissions: []
+  - name: 🥈 B-Rank
+    color: "#bdc3c7"
+    permissions: []
+  - name: 🥉 C-Rank
+    color: "#cd7f32"
+    permissions: []
+  - name: ⭐ Level 50
+    color: "#ff6b81"
+    permissions: []
+  - name: ⭐ Level 25
+    color: "#ff9ff3"
+    permissions: []
+  - name: ⭐ Level 10
+    color: "#74b9ff"
+    permissions: []
+  - name: ⭐ Level 5
+    color: "#81ecec"
+    permissions: []
+  - name: ✅ Verified
+    permissions: []                  # members get normal permissions from @everyone
+  - {name: Alight Motion, permissions: []}
+  - {name: After Effects, permissions: []}
+  - {name: CapCut, permissions: []}
+  - {name: Premiere Pro, permissions: []}
+  - {name: Video Star, permissions: []}
+  - {name: 🔔 Announcement Ping, mentionable: true, permissions: []}
+  - {name: 🔔 Partnership Ping, mentionable: true, permissions: []}
+
+categories:
+  - name: "--> VERIFICATION ✅ <--"
+    channels:
+      - name: ✅┃Verify
+        topic: React below to verify and unlock the server.
+        overwrites:
+          <<: *public_read_only
+          "@everyone": {allow: [view_channel, read_message_history, add_reactions],
+                        deny: [send_messages, send_messages_in_threads, create_public_threads,
+                               create_private_threads]}
+          "✅ Verified": {deny: [view_channel]}      # hide once verified
+          "Server Manager": *manager_access
+          "🤖 Bots": *bot_access
+
+  - name: "--> WELCOME 👋 <--"
+    overwrites: [*members_only, *read_only]
+    channels:
+      - name: 📄┃Rules
+        topic: Read before posting. Breaking these gets you warned, muted or banned.
+        overwrites: *public_read_only
+        messages:
+          - key: rules
+            embed:
+              title: 📄 Server Rules
+              color: "#5865f2"
+              description: |
+                **1. Be respectful.** No harassment, hate speech, slurs or drama.
+                **2. Credit creators.** Never repost someone's edit, pack or preset as your own. Credit audio, clips and overlays.
+                **3. No stolen edits.** Reuploads without permission are removed and get you a warning.
+                **4. Keep it SFW.** No NSFW, gore or shock content anywhere.
+                **5. No spam or self-promo** outside the channels meant for it. No unsolicited DMs.
+                **6. Use the right channel.** Chat in chat, edits in your-edits, bot commands in cmds.
+                **7. No piracy or malware.** Only share official download links.
+                **8. Follow Discord's Terms of Service and Community Guidelines.**
+
+                Need staff? Open a ticket in 🎫┃Support.
+              footer: Staff decisions are final.
+      - name: 📢┃Announcements
+        topic: Server news and updates.
+      - name: 👋┃Welcome
+        topic: Say hi to new members!
+      - name: 🎭┃Roles
+        topic: React to pick your editing software and ping roles.
+      - name: 📰┃N3r0-Edits
+        topic: Edits by N3r0.
+      - name: 🎬┃N3r0-Pack
+        topic: N3r0's pack of overlays, presets and assets.
+      - name: 📝┃Partnership-Info
+        topic: Requirements and how to partner with us.
+        messages:
+          - key: partnership-info
+            embed:
+              title: 📝 Partnerships
+              color: "#1abc9c"
+              description: |
+                Want to partner with us? Open a ticket in 🎫┃Support with:
+                • Your server invite link
+                • Your member count (we look for 50+)
+                • A short description of your server
+
+                Partners get the 🤝 Partner role and a post in 🤝┃Partnerships.
+      - name: 🤝┃Partnerships
+        topic: Our partner servers.
+
+  - name: "╔═══「EDITOR COMMUNITY」═══╗"
+    overwrites: *members_only
+    channels:
+      - name: 💬┃Chat
+        topic: General chat. Keep it friendly.
+      - name: 📈┃Your-Edits
+        topic: Share your edits! Credit audio and clips.
+        slowmode_delay: 60
+      - name: 🎨┃Art
+        topic: Drawings, graphics and thumbnails.
+      - name: 💡┃Ideas
+        type: forum
+        topic: Suggest ideas for edits or the server. One idea per post.
+      - name: ⚙️┃Ranking-System
+        topic: How edits are ranked.
+        overwrites: *read_only
+        messages:
+          - key: ranking-system
+            embed:
+              title: ⚙️ Ranking System
+              color: "#9b59b6"
+              description: |
+                Post your best edit in 📈┃Your-Edits and staff will rank it:
+
+                💎 **S-Rank**: outstanding, top-tier quality
+                🥇 **A-Rank**: great edit, strong effects and sync
+                🥈 **B-Rank**: solid edit with room to grow
+                🥉 **C-Rank**: a good start, keep practising
+
+                Ranked edits are featured in 🏆┃Ranking-Edits. You can be re-ranked once a month.
+                Chatting also earns XP: reach levels 5, 10, 25 and 50 for ⭐ level roles.
+      - name: 🏆┃Ranking-Edits
+        topic: Edits ranked by staff.
+        overwrites: *read_only
+      - name: 🖼️┃Wall-Of-Shame
+        topic: The worst edits and funniest fails. All in good fun.
+        overwrites: *read_only
+      - name: 👀┃Profiles
+        topic: Introduce yourself. Your socials, software and style. One post per hour.
+        slowmode_delay: 3600
+      - name: 👾┃Collab
+        topic: Find editors to collab with.
+      - name: 💌┃Requests
+        topic: Request edits, overlays or help.
+      - name: ⭐┃Level-Up
+        topic: Level-up announcements.
+        overwrites: *read_only
+      - name: 🤖┃Cmds
+        topic: Bot commands go here.
+
+  - name: "--> CLIPS FOR EDITS <--"
+    overwrites: [*members_only, *read_only]
+    channels:
+      - name: 🤖┃Bot-Clips
+        topic: Clips for edits.
+      - name: 🐎┃Umamusume-Clips
+        topic: Umamusume clips for edits.
+
+  - name: "--> F O R  E D I T S <--"
+    overwrites: [*members_only, *read_only]
+    channels:
+      - name: 🎞️┃Stop-Frame
+        type: forum
+        topic: Stop-frame packs and tutorials.
+      - name: ⚔️┃Tutorials
+        topic: Editing tutorials.
+      - name: 📜┃Overlays
+        topic: Overlays for your edits.
+      - name: 🏞️┃Backgrounds
+        topic: Backgrounds and wallpapers.
+      - name: 📣┃Sound-Effects
+        topic: Sound effects.
+      - name: 🗣️┃Voice-Pack
+        topic: Voice lines and voice packs.
+      - name: 🎵┃Songs-For-Edit
+        topic: Songs and audio for edits.
+      - name: 📷┃Videos-Photos
+        topic: Raw videos and photos.
+      - name: 📥┃Apk-Download
+        topic: Official download links for editing apps only. No modded or cracked APKs.
+      - name: ⚙️┃Am-Presets
+        topic: Alight Motion presets.
+
+  - name: "--> Voice Chat- 🔊 <--"
+    overwrites: *members_only
+    channels:
+      - {name: 🔊┃Call 1, type: voice}
+      - {name: 🔊┃Call 2, type: voice, user_limit: 2}
+      - {name: 🔊┃Call 3, type: voice, user_limit: 3}
+      - {name: 🔊┃Call 4, type: voice, user_limit: 4}
+      - {name: 🤝┃Duo, type: voice, user_limit: 2}
+      - {name: 💤┃Sleep, type: stage}
+
+  - name: "⇢ MUSIC - 🎶 <--"
+    overwrites: *members_only
+    channels:
+      - {name: 🎶┃Music 1, type: voice}
+      - {name: 🎶┃Music 2, type: voice, user_limit: 2}
+      - {name: 🎶┃Music 3, type: voice, user_limit: 2}
+
+  # Additions (not in the references)
+  - name: "--> SUPPORT 🎫 <--"
+    overwrites: [*members_only, *read_only]
+    channels:
+      - name: 🎫┃Support
+        topic: Open a ticket to contact staff or apply for a partnership.
+
+  - name: "--> STAFF 🔒 <--"
+    overwrites:
+      "@everyone": {deny: [view_channel]}
+      "🔨 Moderator": {allow: [view_channel, send_messages, read_message_history]}
+      "Server Manager": *manager_access
+      "🤖 Bots": *bot_access
+    channels:
+      - name: 🔒┃Mod-Chat
+        topic: Staff discussion.
+      - name: 📋┃Mod-Logs
+        topic: Carl-bot moderation logs.

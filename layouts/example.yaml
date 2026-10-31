@@ -1,0 +1,48 @@
+# Example layout. Only what's listed here is created or updated, and only the
+# fields you set are managed. Nothing in the server is ever deleted.
+#
+# Permission names are discord.py's: view_channel, send_messages, manage_messages,
+# kick_members, ban_members, moderate_members, connect, speak, read_message_history, ...
+
+roles:
+  - name: Moderator
+    color: "#e67e22"
+    hoist: true            # show members separately in the member list
+    mentionable: true
+    permissions: [view_channel, send_messages, read_message_history, manage_messages,
+                  kick_members, moderate_members]
+  - name: Member
+    color: "#2ecc71"
+    permissions: [view_channel, send_messages, read_message_history, connect, speak]
+
+categories:
+  - name: "📌 INFORMATION"
+    overwrites:            # everyone can read, nobody but mods can post
+      "@everyone": {allow: [view_channel], deny: [send_messages]}
+      Moderator: {allow: [send_messages]}
+    channels:
+      - name: welcome
+        topic: Start here!
+        messages:
+          - key: welcome   # stable key so reruns edit this message instead of reposting
+            embed:
+              title: Welcome to the server!
+              description: |
+                Read the rules in #rules, then say hi in #general.
+              color: "#5865f2"
+              footer: Enjoy your stay
+      - name: rules
+      - name: announcements
+        type: announcement   # needs Community enabled on the server
+
+  - name: "💬 COMMUNITY"
+    channels:
+      - name: general
+      - name: media
+        slowmode_delay: 10
+      - name: General VC
+        type: voice
+        user_limit: 10
+
+# Channels outside any category
+channels: []
